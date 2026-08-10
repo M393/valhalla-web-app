@@ -18,6 +18,7 @@ export function RouteHoverPopup({ lng, lat, summary }: RouteHoverPopupProps) {
       closeButton={false}
       closeOnClick={false}
       maxWidth="none"
+      className="popup-passthrough"
     >
       <div className="min-w-[120px] px-2">
         <div className="font-bold text-muted-foreground">Route Summary</div>

@@ -141,6 +141,11 @@ body {
   @apply !rounded-2xl !shadow-xl !p-0;
 }
 
+/* Override maplibre's pointer-event-auto on popup-content */
+.popup-passthrough .maplibregl-popup-content {
+  pointer-events: none;
+}
+
 i.help.grey.icon {
   color: #9943f5 !important;
 }
