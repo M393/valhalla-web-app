@@ -25,7 +25,7 @@ export function RouteHoverPopup({ lng, lat, summary }: RouteHoverPopupProps) {
         <div className="flex items-center gap-1">
           <MoveHorizontal className="size-3.5" />
           <span>
-            {`${summary.length.toFixed(summary.length > 1000 ? 0 : 1)} km`}
+            {`${summary.length.toFixed(summary.length >= 1000 ? 0 : 1)} km`}
           </span>
         </div>
         <div className="flex items-center gap-1">
