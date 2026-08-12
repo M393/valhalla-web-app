@@ -260,7 +260,7 @@ export const QuickSettings = ({
           {showLanguage && (
             <SelectSetting
               id="directions-language"
-              label="Directions language"
+              label="Language"
               description="The language used for turn-by-turn navigation instructions."
               placeholder="Select language"
               value={language}
