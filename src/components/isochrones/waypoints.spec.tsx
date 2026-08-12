@@ -3,31 +3,16 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Waypoints } from './waypoints';
 
-const mockUpdateSettings = vi.fn();
 const mockClearIsos = vi.fn();
 const mockUpdateTextInput = vi.fn();
 const mockReceiveGeocodeResults = vi.fn();
 const mockRefetchIsochrones = vi.fn();
-const mockNavigate = vi.fn();
-
-vi.mock('@tanstack/react-router', () => ({
-  useNavigate: vi.fn(() => mockNavigate),
-}));
-
-vi.mock('@/utils/parse-url-params', () => ({
-  parseUrlParams: vi.fn(() => ({})),
-}));
 
 vi.mock('@/stores/isochrones-store', () => ({
   useIsochronesStore: vi.fn((selector) =>
     selector({
-      updateSettings: mockUpdateSettings,
       clearIsos: mockClearIsos,
       updateTextInput: mockUpdateTextInput,
-      maxRange: 30,
-      interval: 10,
-      denoise: 1,
-      generalize: 200,
       userInput: 'Berlin',
       geocodeResults: [],
       receiveGeocodeResults: mockReceiveGeocodeResults,
@@ -74,30 +59,6 @@ vi.mock('@/components/ui/waypoint-search', () => ({
   ),
 }));
 
-vi.mock('@/components/ui/slider-setting', () => ({
-  SliderSetting: vi.fn(
-    ({ id, label, value, onValueChange, onValueCommit, onInputChange }) => (
-      <div data-testid={`slider-${id}`}>
-        <label htmlFor={id}>{label}</label>
-        <input
-          id={id}
-          type="range"
-          value={value}
-          onChange={(e) => onValueChange([Number(e.target.value)])}
-          onMouseUp={() => onValueCommit?.()}
-          data-testid={`slider-input-${id}`}
-        />
-        <button
-          data-testid={`slider-commit-${id}`}
-          onClick={() => onInputChange?.([value + 5])}
-        >
-          Change {label}
-        </button>
-      </div>
-    )
-  ),
-}));
-
 describe('Waypoints (Isochrones)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -133,40 +94,6 @@ describe('Waypoints (Isochrones)', () => {
     expect(mockClearIsos).toHaveBeenCalled();
   });
 
-  it('should render Isochrone settings section', () => {
-    render(<Waypoints />);
-    expect(screen.getByText(/Isochrone settings/i)).toBeInTheDocument();
-  });
-
-  it('should render all isochrone setting sliders by default', () => {
-    render(<Waypoints />);
-
-    expect(screen.getByTestId('slider-maxRange')).toBeInTheDocument();
-    expect(screen.getByTestId('slider-interval')).toBeInTheDocument();
-    expect(screen.getByTestId('slider-denoise')).toBeInTheDocument();
-    expect(screen.getByTestId('slider-generalize')).toBeInTheDocument();
-  });
-
-  it('should render Maximum Range slider with correct label', () => {
-    render(<Waypoints />);
-    expect(screen.getByText('Maximum Range')).toBeInTheDocument();
-  });
-
-  it('should render Interval Step slider', () => {
-    render(<Waypoints />);
-    expect(screen.getByText('Interval Step')).toBeInTheDocument();
-  });
-
-  it('should render Denoise slider', () => {
-    render(<Waypoints />);
-    expect(screen.getByText('Denoise')).toBeInTheDocument();
-  });
-
-  it('should render Generalize slider', () => {
-    render(<Waypoints />);
-    expect(screen.getByText('Generalize')).toBeInTheDocument();
-  });
-
   it('should call receiveGeocodeResults when geocode results are received', async () => {
     const user = userEvent.setup();
     render(<Waypoints />);
@@ -187,27 +114,6 @@ describe('Waypoints (Isochrones)', () => {
     expect(mockUpdateTextInput).toHaveBeenCalledWith({
       userInput: 'Selected Location',
       addressIndex: 0,
-    });
-  });
-
-  it('should call updateSettings when slider value changes', async () => {
-    const user = userEvent.setup();
-    render(<Waypoints />);
-
-    await user.click(screen.getByTestId('slider-commit-maxRange'));
-
-    expect(mockUpdateSettings).toHaveBeenCalledWith({
-      name: 'maxRange',
-      value: 35,
-    });
-  });
-
-  it('should sync settings to URL on mount', () => {
-    render(<Waypoints />);
-
-    expect(mockNavigate).toHaveBeenCalledWith({
-      search: expect.any(Function),
-      replace: true,
     });
   });
 });

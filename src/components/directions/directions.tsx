@@ -160,8 +160,6 @@ export const DirectionsControl = () => {
           </TooltipContent>
         </Tooltip>
       </div>
-      <QuickSettings />
-      <SettingsFooter />
       {results.data && (
         <div>
           <h3 className="font-bold mb-2">Directions</h3>
@@ -184,6 +182,10 @@ export const DirectionsControl = () => {
           </div>
         </div>
       )}
+      <div className="mt-auto flex flex-col gap-3 pt-9">
+        <QuickSettings />
+        <SettingsFooter />
+      </div>
     </>
   );
 };

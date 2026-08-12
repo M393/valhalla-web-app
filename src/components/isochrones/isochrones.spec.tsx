@@ -66,6 +66,12 @@ vi.mock('./waypoints', () => ({
   Waypoints: () => <div data-testid="mock-waypoints">Waypoints</div>,
 }));
 
+vi.mock('./isochrone-settings', () => ({
+  IsochroneSettings: () => (
+    <div data-testid="mock-isochrone-settings">Isochrone Settings</div>
+  ),
+}));
+
 vi.mock('@/components/settings-footer', () => ({
   SettingsFooter: () => (
     <div data-testid="mock-settings-footer">Settings Footer</div>

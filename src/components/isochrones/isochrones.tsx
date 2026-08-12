@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Waypoints } from './waypoints';
+import { IsochroneSettings } from './isochrone-settings';
 import { SettingsFooter } from '@/components/settings-footer';
 import { QuickSettings } from '@/components/quick-settings';
 import { useIsochronesStore } from '@/stores/isochrones-store';
@@ -78,14 +79,17 @@ export const IsochronesControl = () => {
   return (
     <>
       <Waypoints />
-      <QuickSettings showAlternates={false} showLanguage={false} />
-      <SettingsFooter />
       {results.data && (
         <div>
           <h3 className="font-bold mb-2">Isochrones</h3>
           <IsochroneCard data={results.data} showOnMap={results.show} />
         </div>
       )}
+      <div className="mt-auto flex flex-col gap-3 pt-9">
+        <IsochroneSettings />
+        <QuickSettings showAlternates={false} showLanguage={false} />
+        <SettingsFooter />
+      </div>
     </>
   );
 };
