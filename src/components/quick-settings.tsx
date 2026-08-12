@@ -15,7 +15,10 @@ import {
   IconEnumButton,
   type IconEnumOption,
 } from '@/components/ui/icon-enum-setting';
-import { DateTimeButton } from '@/components/ui/date-time-button';
+import {
+  DateTimeButton,
+  DateTimeCaption,
+} from '@/components/ui/date-time-button';
 import { SettingsButton } from '@/components/settings-button';
 import { cn } from '@/lib/utils';
 import { useCommonStore } from '@/stores/common-store';
@@ -231,52 +234,6 @@ export const QuickSettings = ({
         className="bg-muted/60 rounded-md px-3 py-2"
       >
         <div className="space-y-1.25">
-          <div className="flex flex-wrap items-center gap-2 py-1">
-            <IconEnumButton
-              id="use_ferry"
-              label="Use ferries"
-              value={willingnessToOption(settings.use_ferry as number)}
-              options={FERRY_OPTIONS}
-              onValueChange={(value) =>
-                handleSettingChange('use_ferry', optionToWillingness(value))
-              }
-            />
-            {supportsHighwayToll && (
-              <>
-                <IconEnumButton
-                  id="use_highways"
-                  label="Use highways"
-                  value={willingnessToOption(settings.use_highways as number)}
-                  options={HIGHWAY_OPTIONS}
-                  onValueChange={(value) =>
-                    handleSettingChange(
-                      'use_highways',
-                      optionToWillingness(value)
-                    )
-                  }
-                />
-                <IconEnumButton
-                  id="use_tolls"
-                  label="Use tolls"
-                  value={willingnessToOption(settings.use_tolls as number)}
-                  options={TOLL_OPTIONS}
-                  onValueChange={(value) =>
-                    handleSettingChange('use_tolls', optionToWillingness(value))
-                  }
-                />
-              </>
-            )}
-            {showTravelTime && (
-              <div className="ml-auto">
-                <DateTimeButton
-                  type={dateTime.type}
-                  value={dateTime.value}
-                  onChange={handleDateTimeChange}
-                />
-              </div>
-            )}
-          </div>
-
           {showAlternates && (
             <SliderSetting
               id="alternates"
@@ -311,6 +268,54 @@ export const QuickSettings = ({
               onValueChange={handleLanguageChange}
               inline
             />
+          )}
+
+          <div className="flex flex-wrap items-center gap-2 py-1">
+            {showTravelTime && (
+              <DateTimeButton
+                type={dateTime.type}
+                value={dateTime.value}
+                onChange={handleDateTimeChange}
+              />
+            )}
+            <IconEnumButton
+              id="use_ferry"
+              label="Use ferries"
+              value={willingnessToOption(settings.use_ferry as number)}
+              options={FERRY_OPTIONS}
+              onValueChange={(value) =>
+                handleSettingChange('use_ferry', optionToWillingness(value))
+              }
+            />
+            {supportsHighwayToll && (
+              <>
+                <IconEnumButton
+                  id="use_highways"
+                  label="Use highways"
+                  value={willingnessToOption(settings.use_highways as number)}
+                  options={HIGHWAY_OPTIONS}
+                  onValueChange={(value) =>
+                    handleSettingChange(
+                      'use_highways',
+                      optionToWillingness(value)
+                    )
+                  }
+                />
+                <IconEnumButton
+                  id="use_tolls"
+                  label="Use tolls"
+                  value={willingnessToOption(settings.use_tolls as number)}
+                  options={TOLL_OPTIONS}
+                  onValueChange={(value) =>
+                    handleSettingChange('use_tolls', optionToWillingness(value))
+                  }
+                />
+              </>
+            )}
+          </div>
+
+          {showTravelTime && (
+            <DateTimeCaption type={dateTime.type} value={dateTime.value} />
           )}
         </div>
       </CollapsibleSection>
