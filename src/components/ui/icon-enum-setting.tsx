@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useQuietPopoverClose } from '@/hooks/use-quiet-popover-close';
 
 export interface IconEnumOption {
   value: string;
@@ -35,18 +36,20 @@ export const IconEnumButton = ({
   onValueChange,
 }: IconEnumButtonProps) => {
   const [open, setOpen] = useState(false);
+  const { triggerRef, tooltipMuted, onCloseAutoFocus } = useQuietPopoverClose();
   const current = options.find((o) => o.value === value) ?? options[0];
   const currentLabel = current?.label ?? '';
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <Tooltip open={open ? false : undefined}>
+      <Tooltip open={open || tooltipMuted ? false : undefined}>
         <TooltipTrigger asChild>
           <span className="inline-flex">
             <PopoverTrigger asChild>
               <Button
                 id={id}
                 type="button"
+                ref={triggerRef}
                 variant="outline"
                 className="h-9 gap-1.5 px-2.5"
                 aria-label={`${label}: ${currentLabel}`}
@@ -61,7 +64,12 @@ export const IconEnumButton = ({
           {label}: {currentLabel}
         </TooltipContent>
       </Tooltip>
-      <PopoverContent side="top" align="center" className="w-auto p-1">
+      <PopoverContent
+        side="top"
+        align="center"
+        onCloseAutoFocus={onCloseAutoFocus}
+        className="w-auto p-1"
+      >
         <ToggleGroup
           type="single"
           variant="outline"

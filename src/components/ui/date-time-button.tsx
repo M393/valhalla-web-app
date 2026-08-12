@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { useQuietPopoverClose } from '@/hooks/use-quiet-popover-close';
 
 export interface DateTimeButtonProps {
   type: number;
@@ -65,6 +66,7 @@ export const DateTimeButton = ({
   const [open, setOpen] = useState(false);
   const triggerLabel = formatTriggerLabel(type, value);
   const tooltipText = `When to travel: ${triggerLabel ?? TYPE_LABELS[-1]}`;
+  const { tooltipMuted, onCloseAutoFocus } = useQuietPopoverClose();
 
   const parsedDate = parseISO(value);
   const selectedDate = isValid(parsedDate) ? parsedDate : new Date();
@@ -89,7 +91,7 @@ export const DateTimeButton = ({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <Tooltip open={open ? false : undefined}>
+      <Tooltip open={open || tooltipMuted ? false : undefined}>
         <TooltipTrigger asChild>
           <span className="inline-flex">
             <PopoverTrigger asChild>
@@ -111,7 +113,12 @@ export const DateTimeButton = ({
         </TooltipTrigger>
         <TooltipContent>{tooltipText}</TooltipContent>
       </Tooltip>
-      <PopoverContent side="top" align="start" className="w-auto p-3">
+      <PopoverContent
+        side="top"
+        align="start"
+        onCloseAutoFocus={onCloseAutoFocus}
+        className="w-auto p-3"
+      >
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="date-time-button-type">When to travel?</Label>
